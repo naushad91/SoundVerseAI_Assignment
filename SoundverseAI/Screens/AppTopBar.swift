@@ -20,9 +20,21 @@ struct AppTopBar: View {
 
             profileButton
 
-            Text(title)
-                .font(AppFont.sectionTitle())
-                .foregroundStyle(DS.Colors.textPrimary)
+            // MARK: - Greeting + Title
+            VStack(alignment: .leading, spacing: 2) {
+
+                Text(GreetingHelper.greeting)
+                    .font(AppFont.caption())
+                    .foregroundStyle(
+                        DS.Colors.textSecondary
+                    )
+
+                Text(title)
+                    .font(AppFont.sectionTitle())
+                    .foregroundStyle(
+                        DS.Colors.textPrimary
+                    )
+            }
 
             Spacer()
 
@@ -62,7 +74,12 @@ private extension AppTopBar {
                 .overlay {
 
                     Image(systemName: "person.fill")
-                        .font(.system(size: 16, weight: .semibold))
+                        .font(
+                            .system(
+                                size: 16,
+                                weight: .semibold
+                            )
+                        )
                         .foregroundStyle(.white)
                 }
         }
@@ -102,7 +119,12 @@ private extension AppTopBar {
 
                 // MARK: - Bell Icon
                 Image(systemName: "bell.fill")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(
+                        .system(
+                            size: 16,
+                            weight: .medium
+                        )
+                    )
                     .foregroundStyle(
 
                         LinearGradient(
@@ -118,7 +140,9 @@ private extension AppTopBar {
 
                 // MARK: - Notification Dot
                 Circle()
-                    .fill(DS.Gradients.primaryGradient)
+                    .fill(
+                        DS.Gradients.primaryGradient
+                    )
                     .frame(width: 9, height: 9)
                     .overlay {
 

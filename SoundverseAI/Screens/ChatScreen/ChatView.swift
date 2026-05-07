@@ -44,10 +44,9 @@ struct ChatView: View {
                         message: "Your high energy gym playlist is ready.",
                         isCurrentUser: false
                     )
-
-                    Spacer(minLength: 120)
                 }
                 .padding(.top, 28)
+                .padding(.bottom, 140) // ✅ Space for tab bar + input bar
             }
 
             // MARK: - Input Bar
@@ -56,11 +55,15 @@ struct ChatView: View {
             ) {
 
             }
+            .padding(.bottom, 95) // ✅ Prevent overlap with CustomTabBar
         }
         .appBackground()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
 #Preview {
-    ChatView()
+    NavigationStack {
+        ChatView()
+    }
 }

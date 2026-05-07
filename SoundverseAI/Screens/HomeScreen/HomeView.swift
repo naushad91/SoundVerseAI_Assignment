@@ -10,11 +10,15 @@ import SwiftUI
 struct HomeView: View {
 
     @State private var showToast = true
-    @State private var selectedTab: AppTab = .activity
 
     var body: some View {
 
-        VStack {
+        VStack(spacing: 0) {
+
+            // MARK: - Top Bar
+            AppTopBar(
+                title: "Home"
+            )
 
             Spacer()
 
@@ -23,45 +27,47 @@ struct HomeView: View {
 
                 HStack(spacing: 12) {
 
-                    Image(systemName: "checkmark.circle")
-                        .font(.title3)
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 18))
 
                     Text("Notification scheduled")
-                        .font(.headline)
-                        .fontWeight(.semibold)
+                        .font(.system(size: 15, weight: .semibold))
                 }
-                .foregroundColor(
-                    Color(red: 54/255, green: 0/255, blue: 80/255)
+                .foregroundStyle(
+                    DS.Colors.toastText
                 )
-                .padding(.horizontal, 28)
-                .padding(.vertical, 18)
+                .padding(.horizontal, 24)
+                .padding(.vertical, 16)
                 .background(
-                    LinearGradient(
-                        colors: [
-                            Color(red: 180/255, green: 110/255, blue: 255/255),
-                            Color(red: 45/255, green: 125/255, blue: 255/255)
-                        ],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
+                    DS.Gradients.primaryGradient
                 )
                 .clipShape(Capsule())
+                .overlay {
+
+                    Capsule()
+                        .stroke(
+                            Color.white.opacity(0.12),
+                            lineWidth: 1
+                        )
+                }
                 .shadow(
-                    color: .purple.opacity(0.5),
-                    radius: 30
+                    color: DS.Shadow.purpleGlow,
+                    radius: 24,
+                    x: 0,
+                    y: 12
                 )
-                .padding(.bottom, 140)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
 
             Spacer()
-
-            // MARK: - Reusable Tab Bar
-            CustomTabBar(selectedTab: $selectedTab)
         }
         .appBackground()
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
 #Preview {
-    HomeView()
+    NavigationStack {
+        HomeView()
+    }
 }

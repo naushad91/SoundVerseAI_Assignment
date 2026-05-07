@@ -5,22 +5,25 @@
 //  Created by Naushad Ali Khan on 08/05/26.
 //
 
-
 import SwiftUI
 
 struct ChatView: View {
+
+    @State private var messageText = ""
 
     var body: some View {
 
         VStack(spacing: 0) {
 
-            // MARK: - Header
-            headerSection
+            // MARK: - Top Bar
+            AppTopBar(
+                title: "Soundverse AI"
+            )
 
             // MARK: - Messages
             ScrollView(showsIndicators: false) {
 
-                VStack(spacing: 18) {
+                LazyVStack(spacing: 18) {
 
                     MessageBubble(
                         message: "Play some late night vibes",
@@ -48,103 +51,13 @@ struct ChatView: View {
             }
 
             // MARK: - Input Bar
-            inputBar
+            ChatInputBar(
+                text: $messageText
+            ) {
+
+            }
         }
         .appBackground()
-    }
-}
-
-// MARK: - Header
-private extension ChatView {
-
-    var headerSection: some View {
-
-        HStack {
-
-            Circle()
-                .fill(DS.Colors.surface)
-                .frame(width: 42, height: 42)
-                .overlay {
-
-                    Image(systemName: "person.fill")
-                        .foregroundStyle(.white)
-                }
-
-            Text("Soundverse AI")
-                .font(.title3.bold())
-                .foregroundStyle(DS.Colors.textPrimary)
-
-            Spacer()
-
-            Button {
-
-            } label: {
-
-                Circle()
-                    .fill(DS.Colors.surface)
-                    .frame(width: 42, height: 42)
-                    .overlay {
-
-                        Image(systemName: "bell")
-                            .foregroundStyle(.white)
-                    }
-            }
-        }
-        .padding(.horizontal, DS.Spacing.screenPadding)
-        .padding(.top, 14)
-    }
-}
-
-// MARK: - Input Bar
-private extension ChatView {
-
-    var inputBar: some View {
-
-        HStack(spacing: 14) {
-
-            Text("Ask Soundverse...")
-                .foregroundStyle(DS.Colors.textSecondary)
-
-            Spacer()
-
-            Button {
-
-            } label: {
-
-                Image(systemName: "arrow.up")
-                    .font(.system(size: 15, weight: .bold))
-                    .foregroundStyle(.white)
-                    .frame(width: 38, height: 38)
-                    .background(
-                        DS.Gradients.primaryGradient
-                    )
-                    .clipShape(Circle())
-            }
-        }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 16)
-        .background(
-            DS.Colors.surface
-        )
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: DS.Radius.large,
-                style: .continuous
-            )
-        )
-        .overlay {
-
-            RoundedRectangle(
-                cornerRadius: DS.Radius.large,
-                style: .continuous
-            )
-            .stroke(
-                DS.Colors.border,
-                lineWidth: 1
-            )
-        }
-        .padding(.horizontal, DS.Spacing.screenPadding)
-        .padding(.bottom, 24)
     }
 }
 

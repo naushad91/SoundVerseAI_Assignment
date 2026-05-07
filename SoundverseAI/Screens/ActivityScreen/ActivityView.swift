@@ -54,6 +54,7 @@ struct ActivityView: View {
                         .move(edge: .bottom)
                         .combined(with: .opacity)
                     )
+                    .zIndex(2) // ensure toast appears above StickyPlayerBar
             }
         }
         .appBackground()

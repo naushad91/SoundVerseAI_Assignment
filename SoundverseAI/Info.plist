@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Jura-Bold.ttf</string>
@@ -10,5 +17,7 @@
 		<string>Jura-Regular.ttf</string>
 		<string>Jura-SemiBold.ttf</string>
 	</array>
+	<key>RAPID_API_KEY</key>
+	<string>$(RAPID_API_KEY)</string>
 </dict>
 </plist>

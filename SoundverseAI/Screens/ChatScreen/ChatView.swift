@@ -11,6 +11,10 @@ struct ChatView: View {
 
     @State private var messageText = ""
 
+    // Approximate combined height of StickyPlayerBar + CustomTabBar
+    // StickyPlayerBar ≈ 84, CustomTabBar ≈ 80
+    private let bottomOverlayHeight: CGFloat = 164
+
     var body: some View {
 
         VStack(spacing: 0) {
@@ -46,7 +50,8 @@ struct ChatView: View {
                     )
                 }
                 .padding(.top, 28)
-                .padding(.bottom, 140)
+                // Reserve space for StickyPlayerBar + TabBar so last messages aren't hidden
+                .padding(.bottom, bottomOverlayHeight + 16)
             }
 
             // MARK: - Input Bar
@@ -55,9 +60,10 @@ struct ChatView: View {
             ) {
 
             }
-            .padding(.bottom, 95)
+            // Reserve space so input bar is not overlapped by the sticky player/tab bar
+            .padding(.bottom, bottomOverlayHeight)
         }
-        .font(AppFont.metadata()) // ✅ Applied AppFont
+        .font(AppFont.metadata())
         .appBackground()
         .toolbar(.hidden, for: .navigationBar)
     }

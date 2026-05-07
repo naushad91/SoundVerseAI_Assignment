@@ -10,7 +10,11 @@ import SwiftUI
 struct RootView: View {
 
     @State private var selectedTab: AppTab = .home
+
     @State private var showMenu = false
+    @State private var showFullPlayer = false
+
+    @StateObject private var player = AudioPlayerManager.shared
 
     @GestureState private var dragOffset: CGFloat = 0
 
@@ -57,6 +61,20 @@ struct RootView: View {
                 )
         }
         .gesture(menuGesture)
+
+        // MARK: - Environment Object
+        .environmentObject(player)
+
+        // MARK: - Full Player
+        .fullScreenCover(
+            isPresented: $showFullPlayer
+        ) {
+
+            FullPlayerView(
+                isPresented: $showFullPlayer
+            )
+            .environmentObject(player)
+        }
     }
 }
 
@@ -75,35 +93,54 @@ private extension RootView {
                 case .home:
 
                     NavigationStack {
+
                         HomeView()
                     }
+                    .environmentObject(player)
 
-                case .chat:
+                case .search:
 
                     NavigationStack {
-                        ChatView()
+
+                        SearchView()
                     }
+                    .environmentObject(player)
 
                 case .activity:
 
                     NavigationStack {
+
                         ActivityView()
                     }
+                    .environmentObject(player)
 
-                case .library:
+                case .chat:
 
                     NavigationStack {
-                        LibraryView()
+
+                        ChatView()
                     }
+                    .environmentObject(player)
                 }
             }
 
-            // MARK: - Tab Bar
-            CustomTabBar(
-                selectedTab: $selectedTab
-            )
+            // MARK: - Bottom Player + Tab Bar
+            VStack(spacing: 12) {
+
+                StickyPlayerBar(
+                    isPresented: $showFullPlayer
+                )
+                .environmentObject(player)
+                .padding(.horizontal, 16)
+
+                CustomTabBar(
+                    selectedTab: $selectedTab
+                )
+            }
         }
         .ignoresSafeArea(edges: .bottom)
+
+        // MARK: - Open Menu Environment
         .environment(\.openMenu) {
 
             withAnimation(.spring) {

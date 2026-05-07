@@ -12,23 +12,23 @@ import SwiftUI
 enum AppTab: Int, CaseIterable {
 
     case home
-    case chat
+    case search
     case activity
-    case library
+    case chat
 
     var icon: String {
         switch self {
         case .home:
             return "house"
 
-        case .chat:
-            return "sparkles"
+        case .search:
+            return "magnifyingglass"
 
         case .activity:
             return "bell"
 
-        case .library:
-            return "music.note.tv"
+        case .chat:
+            return "sparkles"
         }
     }
 
@@ -37,14 +37,14 @@ enum AppTab: Int, CaseIterable {
         case .home:
             return "Home"
 
-        case .chat:
-            return "Chat"
+        case .search:
+            return "Search"
 
         case .activity:
             return "Activity"
 
-        case .library:
-            return "Library"
+        case .chat:
+            return "Chat"
         }
     }
 }
@@ -90,4 +90,3 @@ struct CustomTabBar: View {
         )
     }
 }
-

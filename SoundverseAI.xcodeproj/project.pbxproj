@@ -10,9 +10,22 @@
 		8760E4D32FAD0F8900BA8143 /* SoundverseAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SoundverseAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8760E62E2FAD238600BA8143 /* Exceptions for "SoundverseAI" folder in "SoundverseAI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8760E4D22FAD0F8900BA8143 /* SoundverseAI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8760E4D52FAD0F8900BA8143 /* SoundverseAI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8760E62E2FAD238600BA8143 /* Exceptions for "SoundverseAI" folder in "SoundverseAI" target */,
+			);
 			path = SoundverseAI;
 			sourceTree = "<group>";
 		};
@@ -256,6 +269,7 @@
 				DEVELOPMENT_TEAM = 9UBHSMTV55;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoundverseAI/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,6 +302,7 @@
 				DEVELOPMENT_TEAM = 9UBHSMTV55;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SoundverseAI/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

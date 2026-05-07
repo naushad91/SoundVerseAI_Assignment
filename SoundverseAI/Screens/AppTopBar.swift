@@ -21,10 +21,10 @@ struct AppTopBar: View {
 
             profileButton
 
+            // MARK: - AppTopBar Title
             Text(title)
-                .font(.system(size: 20, weight: .bold))
+                .font(AppFont.sectionTitle()) // ✅ Applied AppFont
                 .foregroundStyle(DS.Colors.textPrimary)
-
             Spacer()
 
             bellButton

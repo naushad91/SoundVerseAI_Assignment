@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-
 // MARK: - Custom Tab Button
 struct CustomTabButton: View {
 
@@ -26,20 +25,17 @@ struct CustomTabButton: View {
                     .font(.title2)
 
                 Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.medium)
+                    .font(AppFont.caption()) // ✅ Applied AppFont
             }
             .foregroundColor(
-                isSelected ?
-                Color(red: 235/255, green: 180/255, blue: 255/255)
-                :
-                    .white.opacity(0.5)
+                isSelected
+                ? Color(red: 235/255, green: 180/255, blue: 255/255)
+                : .white.opacity(0.5)
             )
             .shadow(
-                color: isSelected ?
-                .purple.opacity(0.8)
-                :
-                    .clear,
+                color: isSelected
+                ? .purple.opacity(0.8)
+                : .clear,
                 radius: 12
             )
         }

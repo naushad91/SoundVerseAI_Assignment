@@ -46,7 +46,7 @@ struct ChatView: View {
                     )
                 }
                 .padding(.top, 28)
-                .padding(.bottom, 140) // ✅ Space for tab bar + input bar
+                .padding(.bottom, 140)
             }
 
             // MARK: - Input Bar
@@ -55,8 +55,9 @@ struct ChatView: View {
             ) {
 
             }
-            .padding(.bottom, 95) // ✅ Prevent overlap with CustomTabBar
+            .padding(.bottom, 95)
         }
+        .font(AppFont.metadata()) // ✅ Applied AppFont
         .appBackground()
         .toolbar(.hidden, for: .navigationBar)
     }

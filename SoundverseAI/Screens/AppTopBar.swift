@@ -12,8 +12,9 @@ struct AppTopBar: View {
 
     let title: String
 
+    var showsBell: Bool = true
+
     var onProfileTap: (() -> Void)? = nil
-    var onBellTap: (() -> Void)? = nil
 
     var body: some View {
 
@@ -21,13 +22,15 @@ struct AppTopBar: View {
 
             profileButton
 
-            // MARK: - AppTopBar Title
             Text(title)
-                .font(AppFont.sectionTitle()) // ✅ Applied AppFont
+                .font(AppFont.sectionTitle())
                 .foregroundStyle(DS.Colors.textPrimary)
+
             Spacer()
 
-            bellButton
+            if showsBell {
+                bellButton
+            }
         }
         .padding(.horizontal, DS.Spacing.screenPadding)
         .padding(.top, 12)
@@ -36,15 +39,15 @@ struct AppTopBar: View {
 
 // MARK: - Components
 private extension AppTopBar {
-
+    
     var profileButton: some View {
-
+        
         Button {
-
+            
             onProfileTap?()
-
+            
         } label: {
-
+            
             Circle()
                 .fill(
                     LinearGradient(
@@ -56,41 +59,66 @@ private extension AppTopBar {
                         endPoint: .bottomTrailing
                     )
                 )
-                .frame(width: 42, height: 42)
+                .frame(width: 44, height: 44)
                 .overlay {
-
+                    
                     Image(systemName: "person.fill")
+                        .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
                 }
         }
         .buttonStyle(.plain)
     }
-
+    
     var bellButton: some View {
-
-        Button {
-
-            onBellTap?()
-
+        NavigationLink {
+            ActivityView()
         } label: {
-
-            Circle()
-                .fill(DS.Colors.surface)
-                .frame(width: 42, height: 42)
-                .overlay {
-
-                    Image(systemName: "bell")
-                        .foregroundStyle(.white)
-                }
-                .overlay {
-
-                    Circle()
-                        .stroke(
-                            DS.Colors.border,
-                            lineWidth: 1
+            ZStack(alignment: .topTrailing) {
+                
+                // Base circle
+                Circle()
+                    .fill(DS.Colors.surface)
+                    .frame(width: 44, height: 44)
+                    .overlay {
+                        Circle()
+                            .strokeBorder(
+                                LinearGradient(
+                                    colors: [
+                                        Color.white.opacity(0.12),
+                                        Color.white.opacity(0.04)
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1
+                            )
+                    }
+                
+                // Bell — centered independently
+                Image(systemName: "bell.fill")
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundStyle(
+                        LinearGradient(
+                            colors: [.white, Color.white.opacity(0.7)],
+                            startPoint: .top,
+                            endPoint: .bottom
                         )
-                }
+                    )
+                    .frame(width: 44, height: 44) // matches circle → auto-centers
+                
+                // Notification dot
+                Circle()
+                    .fill(DS.Gradients.primaryGradient)
+                    .frame(width: 9, height: 9)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(DS.Colors.backgroundPrimary, lineWidth: 1.5)
+                    )
+                    .offset(x: 1, y: 1)
+            }
         }
         .buttonStyle(.plain)
     }
 }
+

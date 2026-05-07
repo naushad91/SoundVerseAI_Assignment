@@ -10,7 +10,7 @@ import SwiftUI
 struct ActivityItem: Identifiable {
 
     let id = UUID()
-
+let isUnread: Bool
     let user: String
     let message: String
     let time: String

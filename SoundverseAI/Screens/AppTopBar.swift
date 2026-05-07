@@ -5,16 +5,14 @@
 //  Created by Naushad Ali Khan on 08/05/26.
 //
 
-
 import SwiftUI
 
 struct AppTopBar: View {
 
     let title: String
-
     var showsBell: Bool = true
 
-    var onProfileTap: (() -> Void)? = nil
+    @Environment(\.openMenu) private var openMenu
 
     var body: some View {
 
@@ -39,15 +37,16 @@ struct AppTopBar: View {
 
 // MARK: - Components
 private extension AppTopBar {
-    
+
+    // MARK: - Profile Button
     var profileButton: some View {
-        
+
         Button {
-            
-            onProfileTap?()
-            
+
+            openMenu?()
+
         } label: {
-            
+
             Circle()
                 .fill(
                     LinearGradient(
@@ -61,7 +60,7 @@ private extension AppTopBar {
                 )
                 .frame(width: 44, height: 44)
                 .overlay {
-                    
+
                     Image(systemName: "person.fill")
                         .font(.system(size: 16, weight: .semibold))
                         .foregroundStyle(.white)
@@ -69,18 +68,24 @@ private extension AppTopBar {
         }
         .buttonStyle(.plain)
     }
-    
+
+    // MARK: - Bell Button
     var bellButton: some View {
+
         NavigationLink {
+
             ActivityView()
+
         } label: {
+
             ZStack(alignment: .topTrailing) {
-                
-                // Base circle
+
+                // MARK: - Base Circle
                 Circle()
                     .fill(DS.Colors.surface)
                     .frame(width: 44, height: 44)
                     .overlay {
+
                         Circle()
                             .strokeBorder(
                                 LinearGradient(
@@ -94,31 +99,38 @@ private extension AppTopBar {
                                 lineWidth: 1
                             )
                     }
-                
-                // Bell — centered independently
+
+                // MARK: - Bell Icon
                 Image(systemName: "bell.fill")
                     .font(.system(size: 16, weight: .medium))
                     .foregroundStyle(
+
                         LinearGradient(
-                            colors: [.white, Color.white.opacity(0.7)],
+                            colors: [
+                                .white,
+                                Color.white.opacity(0.7)
+                            ],
                             startPoint: .top,
                             endPoint: .bottom
                         )
                     )
-                    .frame(width: 44, height: 44) // matches circle → auto-centers
-                
-                // Notification dot
+                    .frame(width: 44, height: 44)
+
+                // MARK: - Notification Dot
                 Circle()
                     .fill(DS.Gradients.primaryGradient)
                     .frame(width: 9, height: 9)
-                    .overlay(
+                    .overlay {
+
                         Circle()
-                            .strokeBorder(DS.Colors.backgroundPrimary, lineWidth: 1.5)
-                    )
+                            .strokeBorder(
+                                DS.Colors.backgroundPrimary,
+                                lineWidth: 1.5
+                            )
+                    }
                     .offset(x: 1, y: 1)
             }
         }
         .buttonStyle(.plain)
     }
 }
-

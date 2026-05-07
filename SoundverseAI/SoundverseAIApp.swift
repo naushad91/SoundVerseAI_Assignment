@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct SoundverseAIApp: App {
+
     var body: some Scene {
+
         WindowGroup {
+
             ContentView()
+                .preferredColorScheme(.dark)
         }
     }
 }

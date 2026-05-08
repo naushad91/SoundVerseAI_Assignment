@@ -5,7 +5,6 @@
 //  Created by Naushad Ali Khan on 08/05/26.
 //
 
-
 import Foundation
 import Combine
 import AVFoundation
@@ -14,6 +13,9 @@ import AVFoundation
 final class AudioPlayerManager: ObservableObject {
 
     static let shared = AudioPlayerManager()
+
+    // MARK: - Persistence Keys
+    private let lastTrackKey = "sv_lastPlayedTrack"
 
     // MARK: - Published State
     @Published var currentTrack: MusicTrack?
@@ -27,7 +29,10 @@ final class AudioPlayerManager: ObservableObject {
     private var player: AVPlayer?
     private var timeObserverToken: Any?
 
-    private init() {}
+    private init() {
+        // Restore last played track (do not auto-play)
+        restoreLastTrack()
+    }
 
     // MARK: - Play Track
     func play(
@@ -35,6 +40,9 @@ final class AudioPlayerManager: ObservableObject {
     ) {
 
         currentTrack = track
+
+        // Persist last played track
+        persistLastTrack(track)
 
         guard let url = URL(
             string: track.preview
@@ -111,6 +119,39 @@ final class AudioPlayerManager: ObservableObject {
         currentTime = 0
         duration = 0
         currentTrack = nil
+
+        // Clear persisted track if you prefer
+        // UserDefaults.standard.removeObject(forKey: lastTrackKey)
+    }
+}
+
+// MARK: - Persistence
+private extension AudioPlayerManager {
+
+    func persistLastTrack(_ track: MusicTrack) {
+        do {
+            let data = try JSONEncoder().encode(track)
+            UserDefaults.standard.set(data, forKey: lastTrackKey)
+        } catch {
+            print("Failed to encode last track:", error)
+        }
+    }
+
+    func restoreLastTrack() {
+        guard
+            let data = UserDefaults.standard.data(forKey: lastTrackKey),
+            let track = try? JSONDecoder().decode(MusicTrack.self, from: data)
+        else {
+            return
+        }
+
+        // Set currentTrack so StickyPlayerBar appears after relaunch.
+        // Do not auto-play; wait for user interaction.
+        currentTrack = track
+        isPlaying = false
+        currentTime = 0
+        duration = 0
+        player = nil
     }
 }
 

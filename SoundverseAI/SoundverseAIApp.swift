@@ -10,6 +10,8 @@ import SwiftUI
 @main
 struct SoundverseAIApp: App {
 
+    @StateObject private var router = AppRouter()
+
     init() {
 
         NotificationManager.shared
@@ -21,6 +23,7 @@ struct SoundverseAIApp: App {
         WindowGroup {
 
             ContentView()
+                .environmentObject(router)
                 .preferredColorScheme(.dark)
         }
     }

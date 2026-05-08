@@ -9,12 +9,13 @@ import SwiftUI
 
 struct RootView: View {
 
-    @State private var selectedTab: AppTab = .home
+    @EnvironmentObject var router: AppRouter
 
     @State private var showMenu = false
     @State private var showFullPlayer = false
 
-    @StateObject private var player = AudioPlayerManager.shared
+    @StateObject private var player =
+    AudioPlayerManager.shared
 
     @GestureState private var dragOffset: CGFloat = 0
 
@@ -65,6 +66,16 @@ struct RootView: View {
         // MARK: - Environment Object
         .environmentObject(player)
 
+        // MARK: - Notification Navigation
+        .onReceive(
+            NotificationCenter.default.publisher(
+                for: .openNotificationChat
+            )
+        ) { _ in
+
+            router.selectedTab = .chat
+        }
+
         // MARK: - Full Player
         .fullScreenCover(
             isPresented: $showFullPlayer
@@ -88,7 +99,7 @@ private extension RootView {
             // MARK: - Screens
             Group {
 
-                switch selectedTab {
+                switch router.selectedTab {
 
                 case .home:
 
@@ -134,7 +145,7 @@ private extension RootView {
                 .padding(.horizontal, 16)
 
                 CustomTabBar(
-                    selectedTab: $selectedTab
+                    selectedTab: $router.selectedTab
                 )
             }
         }
@@ -185,4 +196,5 @@ private extension RootView {
 
 #Preview {
     RootView()
+        .environmentObject(AppRouter())
 }

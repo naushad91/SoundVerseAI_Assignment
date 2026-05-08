@@ -9,8 +9,8 @@ import SwiftUI
 // MARK: - Home View
 struct HomeView: View {
 
-    @State private var showToast = true
-    @State private var toastVisible = false
+    // Reuse SearchViewModel so the search field on Home behaves like Search screen
+    @StateObject private var searchVM = SearchViewModel()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -18,28 +18,18 @@ struct HomeView: View {
             // MARK: - Top Bar
             AppTopBar(title: "Home")
 
+            // MARK: - Search Field (same as SearchView)
             Spacer()
+            
+            IntroCard(
+                title: "About Me",
+                lines: [
+                    "iOS Engineer passionate about building Soundverse AI for scalable next-gen music experiences.",
+                    "Focused on sleek interfaces, real-time audio systems, and AI-powered interactions."
+                ]
+            )
+            .padding(.bottom, 4)
 
-            // MARK: - Toast
-            if showToast {
-                ToastBanner()
-                    .opacity(toastVisible ? 1 : 0)
-                    .offset(y: toastVisible ? 0 : 20)
-                    .onAppear {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.72)) {
-                            toastVisible = true
-                        }
-                        // Auto-dismiss after 3s
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                            withAnimation(.easeInOut(duration: 0.35)) {
-                                toastVisible = false
-                            }
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                showToast = false
-                            }
-                        }
-                    }
-            }
 
             Spacer()
         }
@@ -48,93 +38,137 @@ struct HomeView: View {
     }
 }
 
-// MARK: - Toast Banner
+// MARK: - Search Field (reused from SearchView)
+private extension HomeView {
 
-private struct ToastBanner: View {
+    var searchField: some View {
 
-    @State private var shimmer = false
+        HStack(spacing: 12) {
 
-    var body: some View {
-        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .foregroundStyle(
+                    DS.Colors.textSecondary
+                )
 
-            // Pulsing icon
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.15))
-                    .frame(width: 28, height: 28)
+            TextField(
+                "Search songs...",
+                text: $searchVM.searchText
+            )
+            .font(AppFont.artistName())
+            .foregroundStyle(
+                DS.Colors.textPrimary
+            )
+            .submitLabel(.search)
+            .onSubmit {
+                Task { await searchVM.search() }
+            }
 
-                Image(systemName: "checkmark")
-                    .font(.system(size: 11, weight: .black))
+            Button {
+
+                Task {
+                    await searchVM.search()
+                }
+
+            } label: {
+
+                Image(systemName: "arrow.up")
+                    .font(
+                        .system(
+                            size: 14,
+                            weight: .bold
+                        )
+                    )
                     .foregroundStyle(.white)
+                    .frame(width: 34, height: 34)
+                    .background(
+                        DS.Gradients.primaryGradient
+                    )
+                    .clipShape(Circle())
             }
-
-            Text("Notification scheduled")
-                .font(AppFont.artistName())
-                .foregroundStyle(.white)
-
-            Spacer()
-
-            // Dismiss pip
-            Circle()
-                .fill(Color.white.opacity(0.18))
-                .frame(width: 6, height: 6)
         }
-        .padding(.leading, 6)
-        .padding(.trailing, 16)
-        .padding(.vertical, 8)
-        .background(toastBackground)
-        .clipShape(Capsule())
-        .overlay(toastBorder)
-        // Reduced, softer shadow
-        .shadow(color: DS.Colors.primary.opacity(0.28), radius: 12, x: 0, y: 4)
-        .padding(.horizontal, DS.Spacing.screenPadding)
-    }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+        .background(
+            DS.Colors.surface
+        )
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: DS.Radius.large,
+                style: .continuous
+            )
+        )
+        .overlay {
 
-    // Shimmer sweep overlay
-    private var toastBackground: some View {
-        ZStack {
-            DS.Gradients.primaryGradient
-
-            // Moving shimmer band
-            GeometryReader { geo in
-                LinearGradient(
-                    colors: [
-                        .clear,
-                        Color.white.opacity(0.12),
-                        .clear
-                    ],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-                .frame(width: geo.size.width * 0.45)
-                .offset(x: shimmer
-                    ? geo.size.width
-                    : -geo.size.width * 0.45
-                )
-                .animation(
-                    .linear(duration: 1.8)
-                    .repeatForever(autoreverses: false),
-                    value: shimmer
-                )
-            }
-            .clipShape(Capsule())
-        }
-        .onAppear { shimmer = true }
-    }
-
-    private var toastBorder: some View {
-        Capsule()
-            .strokeBorder(
-                LinearGradient(
-                    colors: [
-                        Color.white.opacity(0.3),
-                        Color.white.opacity(0.06)
-                    ],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ),
+            RoundedRectangle(
+                cornerRadius: DS.Radius.large,
+                style: .continuous
+            )
+            .stroke(
+                DS.Colors.border,
                 lineWidth: 1
             )
+        }
+        .padding(.horizontal, DS.Spacing.screenPadding)
+        .padding(.top, 18)
+    }
+}
+
+// MARK: - Intro Card
+private struct IntroCard: View {
+
+    let title: String
+    let lines: [String]
+
+    var body: some View {
+
+        VStack(spacing: 14) {
+
+            Text(title)
+                .font(AppFont.sectionTitle())
+                .foregroundStyle(
+                    DS.Colors.textPrimary
+                )
+                .multilineTextAlignment(.center)
+
+            VStack(spacing: 8) {
+
+                ForEach(lines, id: \.self) { line in
+
+                    Text(line)
+                        .font(AppFont.metadata())
+                        .foregroundStyle(
+                            DS.Colors.textSecondary
+                        )
+                        .multilineTextAlignment(.center)
+                        .fixedSize(
+                            horizontal: false,
+                            vertical: true
+                        )
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(20)
+        .background(
+            DS.Colors.surface
+        )
+        .clipShape(
+            RoundedRectangle(
+                cornerRadius: DS.Radius.medium,
+                style: .continuous
+            )
+        )
+        .overlay(
+            RoundedRectangle(
+                cornerRadius: DS.Radius.medium,
+                style: .continuous
+            )
+            .stroke(
+                DS.Colors.border,
+                lineWidth: 1
+            )
+        )
+        .padding(.horizontal, DS.Spacing.screenPadding)
     }
 }
 

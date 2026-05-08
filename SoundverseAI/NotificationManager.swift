@@ -68,23 +68,29 @@ final class NotificationManager: NSObject {
 
 // MARK: - UNUserNotificationCenterDelegate
 extension NotificationManager: UNUserNotificationCenterDelegate {
-
+    
     // MARK: - Foreground Notification Handling
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-
+        
         // ✅ Show notification even in foreground
         return [.banner, .sound, .badge]
     }
-
+    
     // MARK: - Tap Handling
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-
-        print("Notification tapped")
+        
+        await MainActor.run {
+            
+            NotificationCenter.default.post(
+                name: .openNotificationChat,
+                object: nil
+            )
+        }
     }
 }

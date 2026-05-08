@@ -27,9 +27,11 @@ struct ActivityView: View {
                     title: "Activity",
                     showsBell: false
                 )
+
                 ScrollView(showsIndicators: false) {
                     LazyVStack(spacing: 16) {
 
+                        
                         ForEach(notifications) { item in
                             Button {
                                 triggerNotification(for: item)
